@@ -1,0 +1,75 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  title: Aggregator API
+  version: "1.0"
+paths:
+  /subscriptions:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: List subscriptions
+      tags:
+      - subscriptions
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create subscription
+      tags:
+      - subscriptions
+  /subscriptions/{id}:
+    delete:
+      parameters:
+      - description: Subscription ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      summary: Delete subscription
+      tags:
+      - subscriptions
+    get:
+      parameters:
+      - description: Subscription ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get subscription
+      tags:
+      - subscriptions
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Subscription ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update subscription
+      tags:
+      - subscriptions
+swagger: "2.0"
