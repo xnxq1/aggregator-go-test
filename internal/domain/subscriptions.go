@@ -3,9 +3,10 @@ package domain
 import "github.com/google/uuid"
 
 type Subscription struct {
-	ServiceName string
-	Price       int
-	UserId      uuid.UUID
-	StartDate   string
-	EndDate     *string
+	Id          uuid.UUID `json:"id"`
+	ServiceName string    `json:"service_name"`
+	Price       int       `json:"price"`
+	UserId      uuid.UUID `json:"user_id"`
+	StartDate   string    `json:"start_date"`
+	EndDate     *string   `json:"end_date"`
 }

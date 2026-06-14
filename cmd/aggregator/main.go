@@ -6,6 +6,9 @@
 package main
 
 import (
+	"aggregator-go-test/internal/infra/db"
+	"aggregator-go-test/internal/infra/db/repo"
+	logic "aggregator-go-test/internal/logic/subscriptions"
 	"context"
 	"errors"
 	"log"
@@ -23,9 +26,24 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
+
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		log.Fatal("DATABASE_URL is not set")
+	}
+	pool, err := db.NewPool(ctx, dsn)
+	if err != nil {
+		log.Fatalf("init db pool: %v", err)
+	}
+	defer pool.Close()
+
+	subRepo := repo.NewSubRepoAdapter(pool)
+	subSvc := logic.NewService(subRepo)
+	subMgr := subscriptions.NewSubscriptionRouterManager(subSvc)
+
 	root := chi.NewRouter()
-	subscriptionManager := subscriptions.SubscriptionRouterManager{}
-	root.Mount("/", subscriptionManager.Init())
+	root.Mount("/", subMgr.Routes())
 	root.Get("/swagger/*", httpSwagger.WrapHandler)
 
 	server := &http.Server{
